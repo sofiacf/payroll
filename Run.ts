@@ -5,8 +5,8 @@ function getSettings(settings = sheets[1].getSheetValues(1, 2, 3, 1)): Setup {
   return { task: settings[0][0], date: settings[2][0], period: settings[1][0] }
 }
 function runPayroll() {
-  if (sheets[0].getName() !== setup.period) copyInput()
   setup = getSettings()
+  if (sheets[0].getName() !== setup.period) copyInput()
   folder = getFolder(setup.period + ' PAYROLL')
   if (setup.task === "RESET") return folder.setTrashed(true)
   let actives = sheets[1].getSheetValues(2, 3, -1, 4).filter(s => s[3] === setup.task).map(s => s[0])
