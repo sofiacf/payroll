@@ -41,10 +41,10 @@ let runners = {
     }
     function create(active) {
       const subject = subjectData[active]
-      const statement = template.makeCopy(subject.id, folder)
+      const statement = template.makeCopy(active, folder)
       const sheet = SpreadsheetApp.open(statement).getSheets()[0]
       insertData(sheet, subject)
-      insertItems(sheet, charges[subject.id])
+      insertItems(sheet, charges[active])
       return statement
     }
   },
