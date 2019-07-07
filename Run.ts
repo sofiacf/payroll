@@ -93,12 +93,12 @@ function copyInput() {
   SpreadsheetApp.flush()
 }
 function getSubjectData(actives) {
-  return sheets[2].getDataRange().getValues().reduce(function getDataObject(obj, row, _index, data) {
-    if (actives.indexOf(row[0] > -1)) obj[row[0]] = data[0].reduce(
-      function getPropsObject(obj, prop, index, row) {
-        obj[prop] = row[index]
-        return obj
+  return sheets[2].getDataRange().getValues().reduce(function getDataObject(dataObj, dataRow, _index, dataArray) {
+    if (actives.indexOf(dataRow[0] > -1)) dataObj[dataRow[0]] = dataArray[0].reduce(
+      function getPropsObject(propsObj, prop, index, subjectArray) {
+        propsObj[prop] = subjectArray[index]
+        return propsObj
       }, {})
-    return obj
+    return dataObj
   }, {})
 }
