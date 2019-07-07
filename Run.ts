@@ -4,8 +4,6 @@ let folder: GoogleAppsScript.Drive.Folder, setup: Setup
 function getSettings(settings = sheets[1].getSheetValues(1, 2, 3, 1)): Setup {
   return { task: settings[0][0], date: settings[2][0], period: settings[1][0] }
 }
-function init() {
-}
 function runPayroll() {
   if (sheets[0].getName() !== setup.period) copyInput()
   setup = getSettings()
