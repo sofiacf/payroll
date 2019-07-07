@@ -4,7 +4,10 @@ let folder: GoogleAppsScript.Drive.Folder, setup: Setup
 function getSettings(settings = sheets[1].getSheetValues(1, 2, 3, 1)): Setup {
   return { task: settings[0][0], date: settings[2][0], period: settings[1][0] }
 }
+function init() {
+}
 function runPayroll() {
+  if (sheets[0].getName() !== setup.period) copyInput()
   setup = getSettings()
   folder = getFolder(setup.period + ' PAYROLL')
   if (setup.task === "RESET") return folder.setTrashed(true)
@@ -14,8 +17,7 @@ function runPayroll() {
 let runners = {
   RUN: function runStatements(actives, period: string) {
     let template = DriveApp.getFileById("1Ultvt-EETMHGrJ9ttrCSlFyOLAccP7U0_J5aGspabu8")
-    let charges = SpreadsheetApp.openById("1pgM6_t_v5LsfLyFOLZTK6klW766m27-jbp1lhgbkfgk")
-      .getSheetByName(period).getSheetValues(2, 1, -1, -1)
+    let charges = sheets[0].getSheetValues(2, 1, -1, -1)
       .reduce(function toItems(a: {}, i: any[]) {
         a[i[12]] = (a[i[12]] || []).concat([toRow(i)])
         return a
@@ -88,8 +90,9 @@ function getFolder(name) {
 }
 function copyInput() {
   let masterId = "1pgM6_t_v5LsfLyFOLZTK6klW766m27-jbp1lhgbkfgk"
-  let source = SpreadsheetApp.openById(masterId).getSheets()[0].getDataRange()
+  let source = SpreadsheetApp.openById(masterId).getSheetByName(setup.period).getDataRange()
   sheets[0].clear().getRange(source.getA1Notation()).setValues(source.getValues())
+  SpreadsheetApp.flush()
 }
 function getSubjectData(actives) {
   return sheets[2].getDataRange().getValues().reduce(function getDataObject(obj, row, _index, data) {
